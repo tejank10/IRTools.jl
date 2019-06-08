@@ -118,7 +118,7 @@ function prune!(ir::IR)
     isempty(arguments(b)) && continue
     brs = filter(br -> br.block == b.id, [br for a in blocks(ir) for br in branches(a)])
     isempty(brs) && continue
-    inputs = [setdiff(in, (a,)) for (a, in) in zip(arguments(b), zip(arguments.(brs)...))]
+    inputs = [setdiff(in, (a,)) for (a, in) in zip(arguments(b), collect(zip(arguments.(brs)...)))]
     del = findall(x -> length(x) == 1, inputs)
     rename = Dict(zip(arguments(b)[del], first.(inputs[del])))
     if !isempty(rename)
